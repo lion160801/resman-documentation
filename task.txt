@@ -1,0 +1,26 @@
+UI
+Màn hình mới:
+	- Màn hình lễ tân
+	- Màn hình quản lý nguyên liệu
+	- Màn hình quản lý khách hàng
+	- Màn hình quản lý nhân viên
+	- Thêm màn hình thống kê
+
+
+
+Thêm vào màn hình có sẵn
+
+Nhân viên: 
+	- Thêm các radiobutton để lọc bàn (còn trống, đang được sd)
+	- Thêm popup lịch sử đặt món
+	- Thêm hiển thị đơn hàng khi thanh toán / số tiền khách đưa và trả lại
+	- Thêm select box để chọn nhân viên hiện tại
+	- Thêm input ghi chú cho đơn hàng
+	- Thêm select box để chọn khách hàng cho bàn
+
+Đầu bếp: 
+	- Các món bị huỷ sẽ hiển thị thông báo rằng đã bị huỷ
+	- Thêm nút thông báo hết món
+	- Thêm các option lọc các món theo : ưu tiên/món/phòng bàn
+
+
