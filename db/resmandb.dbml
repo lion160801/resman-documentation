@@ -1,0 +1,155 @@
+
+table discount_customer [headercolor: #79AD51] {
+  discount_customer_id integer [pk]
+  customer_id integer
+  dish_id integer
+  value_type enum
+  value string
+  description string
+  type enum
+}
+
+table dish [headercolor: #EB801B] {
+  dish_id integer [pk]
+  name string
+  price string
+  status string
+  unit enum
+  type enum
+  image bit
+}
+
+table staff_commission [headercolor: #2D6512] {
+  staff_id integer [pk]
+  commission integer
+  description string 
+  is_applied boolean
+  date datetime
+}
+
+table staff_salary [headercolor: #24BAB1] {
+  staff_salary_id integer
+  staff_id integer 
+  salary integer
+  work_days integer
+  date integer
+}
+
+
+table dish_formula [headercolor: #E4A62E] {
+  dish_formula_id integer [pk]
+  dish_id integer
+  ingredient_id integer
+  value integer
+}
+
+table ingredient [headercolor: #DE65C3] {
+  ingredient_id integer [pk]
+  name string
+  unit enum
+  
+}
+
+table floor [headercolor: #1E69FD] {
+  floor_id integer [pk]
+  no_floor integer
+  description text
+}
+
+table table [headercolor: #4B82B0] {
+  table_id integer [pk]
+  floor_id integer  
+  name string
+  capacity integer
+  status enum
+  note text
+}
+
+table staff [headercolor: #EB801B] {
+  staff_id integer [pk]
+  staff_type_id integer
+  name string
+  phone_number string
+  birthdate datetime
+  image bit
+  address string
+}
+
+table customer [headercolor: #CA4292] {
+  customer_id integer [pk]
+  name string
+  phone_number string
+  birthdate datetime
+  sex enum
+}
+
+table booked_table[headercolor: #333300] {
+  booked_table_id integer [pk]
+  staff_id integer
+  staff_type enum
+  customer_id integer
+  table_id integer
+  time timestamp
+  note string
+  status enum
+
+}
+
+table order_detail [headercolor: #8F8DD8] {
+  order_detail_id integer [pk]
+  dish_id integer
+  order_id integer
+  quantity integer
+  note string
+}
+
+table order [headercolor: #6724BB] {
+  order_id integer [pk]
+  status enum
+  date datetime
+}
+
+table bill [headercolor: #339933] {
+  bill_id integer [pk]
+  order_id integer
+  total integer [note: 'Day la note ne']
+  note: 'đây là bảng bill nè'
+}
+
+table staff_type {
+  staff_type_id integer
+  name description
+  salary integer
+  working_hours integer
+}
+
+
+Ref: "floor"."floor_id" < "table"."floor_id"
+
+Ref: "staff"."staff_id" < "booked_table"."staff_id"
+
+Ref: "table"."table_id" < "booked_table"."table_id"
+
+
+
+Ref: "dish"."dish_id" < "order_detail"."dish_id"
+
+Ref: "order"."order_id" < "order_detail"."order_id"
+
+Ref: "bill"."bill_id" - "order"."order_id"
+
+Ref: "ingredient"."ingredient_id" < "dish_formula"."ingredient_id"
+
+Ref: "dish"."dish_id" < "dish_formula"."dish_id"
+
+Ref: "staff"."staff_id" < "staff_commission"."staff_id"
+
+Ref: "customer"."customer_id" - "discount_customer"."customer_id"
+
+Ref: "customer"."customer_id" < "booked_table"."customer_id"
+
+Ref: "staff_type"."staff_type_id" < "staff"."staff_type_id"
+
+Ref: "staff"."staff_id" < "staff_salary"."staff_id"
+
+Ref: "dish"."dish_id" - "discount_customer"."dish_id"
