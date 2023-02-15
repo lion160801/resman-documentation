@@ -1,12 +1,17 @@
-
-table discount_customer [headercolor: #79AD51] {
-  discount_customer_id integer [pk]
-  customer_id integer
+table discount_dish [headercolor: #CA4242] {
+  discount_id integer [pk]
   dish_id integer
   value_type enum
   value string
   description string
-  type enum
+}
+
+table discount_customer [headercolor: #79AD51] {
+  discount_customer_id integer [pk]
+  customer_id integer
+  value_type enum [note: 'percent/permanent']
+  value string
+  description string
 }
 
 table dish [headercolor: #EB801B] {
@@ -14,9 +19,10 @@ table dish [headercolor: #EB801B] {
   name string
   price string
   status string
-  unit enum
-  type enum
   image bit
+  unit enum [note: 'dĩa/chén/tô/...']
+  type enum [note: 'khai vị/ món chính/ nước ngọt/ bia/...']
+  description text
 }
 
 table staff_commission [headercolor: #2D6512] {
@@ -40,19 +46,21 @@ table dish_formula [headercolor: #E4A62E] {
   dish_formula_id integer [pk]
   dish_id integer
   ingredient_id integer
+  unit float
   value integer
 }
 
 table ingredient [headercolor: #DE65C3] {
   ingredient_id integer [pk]
   name string
-  unit enum
-  
+  type enum [note: 'rau củ/ thịt / cá/ nước']
+  unit enum [note: 'kg/lon/...']
 }
 
 table floor [headercolor: #1E69FD] {
   floor_id integer [pk]
   no_floor integer
+  status enum [note: 'sẵn sàng / đang bảo trì/...']
   description text
 }
 
@@ -61,18 +69,20 @@ table table [headercolor: #4B82B0] {
   floor_id integer  
   name string
   capacity integer
-  status enum
+  status enum [note: 'sẵn sàng / đang sử dụng/ đang hỏng /...']
   note text
 }
 
 table staff [headercolor: #EB801B] {
   staff_id integer [pk]
   staff_type_id integer
+  staff_role_id integer
   name string
   phone_number string
   birthdate datetime
   image bit
   address string
+  start_date datetime
 }
 
 table customer [headercolor: #CA4292] {
@@ -80,18 +90,18 @@ table customer [headercolor: #CA4292] {
   name string
   phone_number string
   birthdate datetime
-  sex enum
+  sex enum [note: 'male/female']
 }
 
 table booked_table[headercolor: #333300] {
   booked_table_id integer [pk]
-  staff_id integer
-  staff_type enum
   customer_id integer
+  staff_id integer
   table_id integer
-  time timestamp
+  time datetime
+  duration time
   note string
-  status enum
+  status enum [note: 'chưa nhận/ đã nhận/...']
 
 }
 
@@ -101,12 +111,14 @@ table order_detail [headercolor: #8F8DD8] {
   order_id integer
   quantity integer
   note string
+  status enum [note: 'đã nhận/ đang chế biến/ chế biến xong/ đã phục vụ/...']
 }
 
 table order [headercolor: #6724BB] {
   order_id integer [pk]
-  status enum
-  date datetime
+  status enum [note: 'đang phục vụ/ đã thanh toán/...']
+  order_time time
+  order_date datetime
 }
 
 table bill [headercolor: #339933] {
@@ -118,19 +130,39 @@ table bill [headercolor: #339933] {
 
 table staff_type {
   staff_type_id integer
-  name description
+  type enum [note: 'partime/fulltime/...']
   salary integer
-  working_hours integer
 }
 
+table ingredient_batch[headercolor: #011B4E] {
+  ingredient_batch_id integer
+  batch_import_id integer
+  ingredient_id integer
+  import_value integer
+  total long
+  unit_price integer
+  in_backlog boolean
+}
+
+table batch_import[headercolor: #990D0D] {
+  batch_import_id integer
+  time_import datetime
+  description text
+  total long
+}
+
+
+table staff_role{
+  staff_role_id integer
+  staff_role_name string
+  description text
+}
 
 Ref: "floor"."floor_id" < "table"."floor_id"
 
 Ref: "staff"."staff_id" < "booked_table"."staff_id"
 
 Ref: "table"."table_id" < "booked_table"."table_id"
-
-
 
 Ref: "dish"."dish_id" < "order_detail"."dish_id"
 
@@ -146,10 +178,16 @@ Ref: "staff"."staff_id" < "staff_commission"."staff_id"
 
 Ref: "customer"."customer_id" - "discount_customer"."customer_id"
 
+Ref: "dish"."dish_id" - "discount_dish"."dish_id"
+
 Ref: "customer"."customer_id" < "booked_table"."customer_id"
 
 Ref: "staff_type"."staff_type_id" < "staff"."staff_type_id"
 
 Ref: "staff"."staff_id" < "staff_salary"."staff_id"
 
-Ref: "dish"."dish_id" - "discount_customer"."dish_id"
+Ref: "ingredient"."ingredient_id" < "ingredient_batch"."ingredient_id"
+
+Ref: "batch_import"."batch_import_id" < "ingredient_batch"."batch_import_id"
+
+Ref: "staff_role"."staff_role_id" < "staff"."staff_role_id"
