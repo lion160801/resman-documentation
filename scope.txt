@@ -1,2 +1,0 @@
-power BI: dùng để phân tích số liệu, từ đó xác định số lượng nguồn hàng nên nhập
-power virtual agents: dùng để gợi ý món ăn cho khách hàng
